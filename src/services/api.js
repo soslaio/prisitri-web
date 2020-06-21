@@ -1,17 +1,29 @@
 
-import { fetchOptions } from '../config';
+import { getOptions, postOptions } from '../config';
 
-export const fetchApi = async url => {
-    return fetch(url, fetchOptions)
+export const getApi = async url => {
+    return fetch(url, getOptions)
         .then(data => data.json());
 }
 
-export const fetchResourceDetails = async (resourceId) => {
+export const postApi = async (url, data) => {
+    const options = postOptions(data);
+    console.log('>>>>>>>>>', options);
+    return fetch(url, options)
+        .then(data => data.json());
+}
+
+export const getResourceDetails = async (resourceId) => {
     const url = `http://localhost:8000/resources/${resourceId}/`;
-    return fetchApi(url);
+    return getApi(url);
 };
 
-export const fetchAvailableSchedules = async (resourceId, scheduleTypeId) => {
+export const getAvailableSchedules = async (resourceId, scheduleTypeId) => {
     const url = `http://localhost:8000/resources/${resourceId}/availabilities/${scheduleTypeId}`;
-    return fetchApi(url);
+    return getApi(url);
+};
+
+export const postOrderWithSchedules = async data => {
+    const url = `http://localhost:8000/orders/`;
+    return postApi(url, data);
 };

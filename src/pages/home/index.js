@@ -11,13 +11,13 @@ export default function () {
 
     const fetchExtendedUserDetails = async () => {
         const url = `http://localhost:8000/extendedusers/${config.loggedExtendedUserId}/`;
-        return fetch(url, config.fetchOptions)
+        return fetch(url, config.getOptions)
             .then(data => data.json())
     }
 
     const fetchCompanyDetails = async () => {
         const url = `http://localhost:8000/companies/${config.selectedCompanyId}/`;
-        return fetch(url, config.fetchOptions)
+        return fetch(url, config.getOptions)
             .then(data => data.json())
     }
 

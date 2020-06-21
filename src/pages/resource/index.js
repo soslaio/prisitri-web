@@ -7,7 +7,7 @@ import { List, Divider } from 'antd';
 import { Steps, Button, message } from 'antd';
 import { Form, Input } from 'antd';
 
-import { fetchAvailableSchedules, fetchResourceDetails } from '../../services/api';
+import { getAvailableSchedules, getResourceDetails, postOrderWithSchedules } from '../../services/api';
 import { loggedExtendedUserId } from '../../config';
 import ptBrLocale from '../../locale.json';
 import './resource.scss';
@@ -40,7 +40,7 @@ export default function () {
 
     const scheduleTypeClick = async scheduleType => {
         try {
-            const fetchResult = await fetchAvailableSchedules(resourceId, scheduleType.id);
+            const fetchResult = await getAvailableSchedules(resourceId, scheduleType.id);
             setAvaiableShedules(fetchResult);
             setScheduleType(scheduleType);
             next();
@@ -64,20 +64,31 @@ export default function () {
     };
 
     const onFinish = values => {
-        const data = {
-            resource: resource.id,
-            requester: loggedExtendedUserId,
-            notes: values.notes,
-            schedules: [schedule]
-        };
-        console.log(data);
-        message.success('Solicitação inserida com sucesso');
+        const scheduleData = {
+            start: schedule.start_iso,
+            end: schedule.end_iso,
+            status: 'pendente'
+        }
+        try {
+            const data = {
+                resource: resource.id,
+                requester: loggedExtendedUserId,
+                notes: values.notes,
+                schedules: [scheduleData]
+            };
+            postOrderWithSchedules(data);
+            message.success('Solicitação inserida com sucesso');
+        }
+        catch (e) {
+            message.error('Não foi possível criar sua solicitação');
+            console.log(e);
+        }
     };
 
     useEffect(() => {
         (async () => {
             try {
-                const fetchResult = await fetchResourceDetails(resourceId);
+                const fetchResult = await getResourceDetails(resourceId);
                 setResource(fetchResult);
             }
             catch (e) {

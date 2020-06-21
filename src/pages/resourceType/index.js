@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 
-import * as config from '../../config';
+import { getOptions } from '../../config';
 
 
 export default function () {
@@ -12,7 +12,7 @@ export default function () {
 
     const fetchResourceTypeDetails = async () => {
         const url = `http://localhost:8000/resourcetypes/${uuid}/`;
-        return fetch(url, config.fetchOptions)
+        return fetch(url, getOptions)
             .then(data => data.json())
     }
 
