@@ -20,7 +20,7 @@ export function getExtendedUser(){
 
 export function getExtendedUserId() {
     const extendedUser = getExtendedUser();
-    return extendedUser.extended_user_id;
+    return extendedUser?.extended_user_id;
 }
 
 // storage changes

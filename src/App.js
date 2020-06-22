@@ -35,13 +35,15 @@ export default function () {
 
     useEffect(() => {
         (async () => {
-            const userDetails = await getExtendedUserDetails();
-            setCompanies(userDetails.companies);
+            if (isAuthenticated()) {
+                const userDetails = await getExtendedUserDetails();
+                setCompanies(userDetails?.companies);
 
-            if (userDetails.companies.length == 1) {
-                const company = userDetails.companies[0];
-                setDefaultCompany(company.id);
-            };
+                if (userDetails?.companies?.length == 1) {
+                    const company = userDetails.companies[0];
+                    setDefaultCompany(company.id);
+                };
+            }
         })();
     }, []);
 
@@ -50,7 +52,7 @@ export default function () {
             <Header>
                 <div className="logo" />
                 <div className="companies-list">
-                    {companies &&
+                    {companies.length > 0 &&
                         <Select
                             value={defaltCompany}
                             style={{ width: 200 }}

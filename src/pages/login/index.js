@@ -5,21 +5,14 @@ import { Form, Input, Button, Checkbox, message } from 'antd';
 import { login } from '../../services/auth';
 import { useHistory } from 'react-router-dom';
 
+import './login.scss';
 
 const layout = {
-    labelCol: {
-        span: 8,
-    },
-    wrapperCol: {
-        span: 16,
-    },
+    labelCol: { span: 4 },
+    wrapperCol: { span: 16 },
 };
-
 const tailLayout = {
-    wrapperCol: {
-        offset: 8,
-        span: 16,
-    },
+    wrapperCol: { offset: 4, span: 16 },
 };
 
 export default function () {
