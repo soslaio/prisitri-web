@@ -8,7 +8,6 @@ export const getApi = async url => {
 
 export const postApi = async (url, data) => {
     const options = postOptions(data);
-    console.log('>>>>>>>>>', options);
     return fetch(url, options)
         .then(data => data.json());
 }
