@@ -8,7 +8,7 @@ import { Steps, Button, message } from 'antd';
 import { Form, Input, Popconfirm } from 'antd';
 
 import { getAvailableSchedules, getResourceDetails, postOrderWithSchedules } from '../../services/api';
-import { loggedExtendedUserId } from '../../config';
+import { getExtendedUserId } from '../../services/auth';
 import ptBrLocale from '../../locale.json';
 import './resource.scss';
 
@@ -75,7 +75,7 @@ export default function () {
         try {
             const data = {
                 resource: resource.id,
-                requester: loggedExtendedUserId,
+                requester: getExtendedUserId(),
                 notes: values.notes,
                 schedules: [scheduleData]
             };

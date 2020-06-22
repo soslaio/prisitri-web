@@ -1,18 +1,17 @@
 
 import { getToken } from './auth';
-import { loggedExtendedUserId, selectedCompanyId } from '../config';
+import { selectedCompanyId } from '../config';
+import { getExtendedUserId } from '../services/auth';
 
 
-const loggedUserJwtToken = getToken();
 const apiServer = process.env.REACT_APP_API_SERVER;
-
 
 // generics
 export const getApi = async url => {
     const options = {
         method: 'GET',
         headers: new Headers({
-            'Authorization': `Bearer ${loggedUserJwtToken}`
+            'Authorization': `Bearer ${getToken()}`
         })
     };
     return fetch(url, options)
@@ -24,7 +23,7 @@ export const postApi = async (url, data) => {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loggedUserJwtToken}`
+            'Authorization': `Bearer ${getToken()}`
         }),
         body: JSON.stringify(data)
     };
@@ -54,8 +53,13 @@ export const getAvailableSchedules = async (resourceId, scheduleTypeId) => {
 };
 
 // details
+export const getUserDetails = async username => {
+    const url = `${apiServer}/users/${username}/`;
+    return getApi(url);
+};
+
 export const getExtendedUserDetails = async () => {
-    const url = `${apiServer}/extendedusers/${loggedExtendedUserId}/`;
+    const url = `${apiServer}/extendedusers/${getExtendedUserId()}/`;
     return getApi(url);
 };
 
