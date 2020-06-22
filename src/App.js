@@ -1,15 +1,20 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, Link } from 'react-router-dom';
 import Home from './pages/home';
 import Resource from './pages/resource';
 import ResourceType from './pages/resourceType';
 import Login from './pages/login';
 import { isAuthenticated } from './services/auth';
 
+import { Select } from 'antd';
+
+import { getExtendedUserDetails } from './services/api';
+
 import './App.scss';
 
+const { Option } = Select;
 const { Header, Content, Footer } = Layout;
 
 // Grampeia o método render do Route para adicionar a verificação de estar logado ou não.
@@ -24,12 +29,48 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 );
 
 export default function () {
+
+    const [companies, setCompanies] = useState([]);
+    const [defaltCompany, setDefaultCompany] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            const userDetails = await getExtendedUserDetails();
+            setCompanies(userDetails.companies);
+
+            if (userDetails.companies.length == 1) {
+                const company = userDetails.companies[0];
+                setDefaultCompany(company.id);
+            };
+        })();
+    }, []);
+
     return (
         <Layout className="layout">
             <Header>
                 <div className="logo" />
-                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                    <Menu.Item key="1">Home</Menu.Item>
+                <div className="companies-list">
+                    {companies &&
+                        <Select
+                            value={defaltCompany}
+                            style={{ width: 200 }}
+                            size="small"
+                            options={companies?.map(company => {
+                                return {
+                                    value: company.id,
+                                    label: company.name
+                                }
+                            })}
+                        >
+                        </Select>
+                    }
+                </div>
+                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+                    <Menu.Item key="1">
+                        <Link to="/">
+                            Home
+                        </Link>
+                    </Menu.Item>
                     <Menu.Item key="2">Solicitar</Menu.Item>
                     <Menu.Item key="3">Meus Pedidos</Menu.Item>
                 </Menu>
