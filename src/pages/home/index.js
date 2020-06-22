@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-
-import * as config from '../../config';
+import { getExtendedUserDetails, getCompanyDetails } from '../../services/api';
 
 
 export default function () {
@@ -9,24 +8,12 @@ export default function () {
     const [companies, setCompanies] = useState([]);
     const [recourceTypes, setResourceTypes] = useState([]);
 
-    const fetchExtendedUserDetails = async () => {
-        const url = `http://localhost:8000/extendedusers/${config.loggedExtendedUserId}/`;
-        return fetch(url, config.getOptions)
-            .then(data => data.json())
-    }
-
-    const fetchCompanyDetails = async () => {
-        const url = `http://localhost:8000/companies/${config.selectedCompanyId}/`;
-        return fetch(url, config.getOptions)
-            .then(data => data.json())
-    }
-
     useEffect(() => {
         (async () => {
-            const userDetails = await fetchExtendedUserDetails();
+            const userDetails = await getExtendedUserDetails();
             setCompanies(userDetails.companies);
 
-            const companyDetails = await fetchCompanyDetails();
+            const companyDetails = await getCompanyDetails();
             setResourceTypes(companyDetails.resource_types);
         })();
     }, []);

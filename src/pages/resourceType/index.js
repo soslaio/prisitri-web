@@ -1,24 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-
-import { getOptions } from '../../config';
+import { getResourceTypeDetails } from '../../services/api';
 
 
 export default function () {
 
-    const { uuid } = useParams();
+    const { resourceTypeId } = useParams();
     const [resourceType, setResourceType] = useState(null);
-
-    const fetchResourceTypeDetails = async () => {
-        const url = `http://localhost:8000/resourcetypes/${uuid}/`;
-        return fetch(url, getOptions)
-            .then(data => data.json())
-    }
 
     useEffect(() => {
         (async () => {
-            const resourceTypeDetails = await fetchResourceTypeDetails();
+            const resourceTypeDetails = await getResourceTypeDetails(resourceTypeId);
             setResourceType(resourceTypeDetails)
         })();
     }, []);
