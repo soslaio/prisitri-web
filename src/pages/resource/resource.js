@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { Row, Col, Calendar } from 'antd';
 import { useParams } from 'react-router';
@@ -8,7 +9,6 @@ import { Steps, Button, message } from 'antd';
 import { Form, Input, Popconfirm } from 'antd';
 
 import { getAvailableSchedules, getResourceDetails, postOrderWithSchedules } from '../../services/api';
-import { getExtendedUserId } from '../../services/auth';
 import ptBrLocale from '../../locale.json';
 import './resource.scss';
 
@@ -16,6 +16,8 @@ const { Step } = Steps;
 
 
 export default function () {
+    const extentedUser = useSelector(state => state.extendedUser);
+
     // parameters
     const { resourceId } = useParams();
 
@@ -75,7 +77,7 @@ export default function () {
         try {
             const data = {
                 resource: resource.id,
-                requester: getExtendedUserId(),
+                requester: extentedUser.id,
                 notes: values.notes,
                 schedules: [scheduleData]
             };

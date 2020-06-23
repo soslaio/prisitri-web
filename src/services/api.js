@@ -1,8 +1,5 @@
 
 import { getToken } from './auth';
-import { selectedCompanyId } from '../config';
-import { getExtendedUserId } from '../services/auth';
-
 
 const apiServer = process.env.REACT_APP_API_SERVER;
 
@@ -58,13 +55,13 @@ export const getUserDetails = async username => {
     return getApi(url);
 };
 
-export const getExtendedUserDetails = async () => {
-    const url = `${apiServer}/extendedusers/${getExtendedUserId()}/`;
+export const getExtendedUserDetails = async extendedUserId => {
+    const url = `${apiServer}/extendedusers/${extendedUserId}/`;
     return getApi(url);
 };
 
-export const getCompanyDetails = async () => {
-    const url = `${apiServer}/companies/${selectedCompanyId}/`;
+export const getCompanyDetails = async companyId => {
+    const url = `${apiServer}/companies/${companyId}/`;
     return getApi(url);
 };
 

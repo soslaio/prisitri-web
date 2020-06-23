@@ -1,36 +1,38 @@
 
 import React from 'react';
-import { Form, Input, Button, Checkbox, message } from 'antd';
-
-import { login } from '../../services/auth';
 import { useHistory } from 'react-router-dom';
+import { Form, Input, Button, Checkbox, message } from 'antd';
+import { useDispatch } from 'react-redux';
 
+import { getUserDetails, login } from '../../actions';
 import './login.scss';
 
 const layout = {
-    labelCol: { span: 4 },
+    labelCol: { span: 6 },
     wrapperCol: { span: 16 },
 };
+
 const tailLayout = {
-    wrapperCol: { offset: 4, span: 16 },
+    wrapperCol: { offset: 6, span: 16 },
 };
 
 export default function () {
 
     const history = useHistory();
+    const dispatch = useDispatch();
 
-    const onFinish = async values => {
-        try {
-            await login(values.username, values.password);
-            history.push('/');
-        }
-        catch (e) {
-            message.error(e.message);
-        }
-    };
-
-    const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
+    const onFinish = values => {
+        login(values.username, values.password)
+            .then(() => dispatch(getUserDetails(values.username)))
+            .then(() => history.push('/'))
+            .catch(error => {
+                if (error instanceof TypeError) {
+                    message.error('Não foi possível efetuar a autenticação');
+                }
+                else {
+                    message.error(error.message);
+                }
+            });
     };
 
     return (
@@ -38,11 +40,10 @@ export default function () {
             <Form
                 {...layout}
                 name="basic"
+                onFinish={onFinish}
                 initialValues={{
                     remember: true,
                 }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Form.Item
                     label="Usuário"
