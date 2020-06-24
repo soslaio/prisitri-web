@@ -61,9 +61,13 @@ export default function () {
                 <Menu.Item key="1">
                     <Link to="/">
                         Home
-            </Link>
+                    </Link>
                 </Menu.Item>
-                <Menu.Item key="2">Solicitar</Menu.Item>
+                <Menu.Item key="2">
+                    <Link to="/solicitar">
+                        Solicitar
+                    </Link>
+                </Menu.Item>
                 <Menu.Item key="3">Meus Pedidos</Menu.Item>
             </Menu>
         </Header>

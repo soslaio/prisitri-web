@@ -35,6 +35,7 @@ export default function () {
                     <Switch>
                         <Route exact path="/login" component={Login} />
                         <PrivateRoute exact path="/" component={Home} />
+                        <PrivateRoute exact path="/solicitar" component={Resource} />
                         {/* <PrivateRoute exact path="/recursos/:resourceId" component={Resource} />
                         <PrivateRoute exact path="/tipos/:resourceTypeId" component={ResourceType} /> */}
                     </Switch>

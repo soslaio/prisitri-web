@@ -1,64 +1,59 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import moment from 'moment';
-import { Row, Col, Calendar } from 'antd';
-import { useParams } from 'react-router';
-import { List, Divider } from 'antd';
-import { Steps, Button, message } from 'antd';
-import { Form, Input, Popconfirm } from 'antd';
+import {
+    Row, Col, List, Form, Input, Space, Steps,
+    Button, Divider, message, Calendar, Popconfirm
+} from 'antd';
 
-import { getAvailableSchedules, getResourceDetails, postOrderWithSchedules } from '../../services/api';
-import ptBrLocale from '../../locale.json';
+import { formatLocaleTime, formatLocaleDateTime } from '../../util';
+import {
+    getCompanyDetails,
+    getResourceDetails,
+    getAvailableSchedules,
+    postOrderWithSchedules,
+    getResourceTypeDetails
+} from '../../services/api';
+
 import './resource.scss';
+import ptBrLocale from '../../locale.json';
 
 const { Step } = Steps;
+const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 16 },
+};
 
 
 export default function () {
-    const extentedUser = useSelector(state => state.extendedUser);
+    const [form] = Form.useForm();
 
-    // parameters
-    const { resourceId } = useParams();
+    // redux
+    const companyId = useSelector(state => state.companyId);
+    const user = useSelector(state => state.user);
 
-    // objects
+    // list states
+    const [resourceTypes, setResourceTypes] = useState([]);
+    const [scheduleTypes, setScheduleTypes] = useState([]);
+    const [resources, setResources] = useState([]);
+    const [avaiableShedules, setAvaiableShedules] = useState([]);
+
+    // object states
+    const [resourceType, setResourceType] = useState(null);
     const [resource, setResource] = useState(null);
     const [scheduleType, setScheduleType] = useState(null);
     const [schedule, setSchedule] = useState(null);
 
-    // lists
-    const [avaiableShedules, setAvaiableShedules] = useState([]);
-
-    // ui auxiliar
-    const defaultDate = moment('2020-06-14');
-    const [form] = Form.useForm();
-    const [value, setValue] = useState(defaultDate);
-    const [avaiableDates, setAvaiableDates] = useState(['2020-06-17', '2020-06-24', '2020-06-30']);
+    // ui states
     const [currentStep, setCurrentStep] = useState(0);
 
+    // ui methods
     const nextStep = () => {
         setCurrentStep(currentStep + 1);
     };
 
     const previousStep = () => {
         setCurrentStep(currentStep - 1);
-    };
-
-    const scheduleTypeClick = async scheduleType => {
-        try {
-            const fetchResult = await getAvailableSchedules(resourceId, scheduleType.id);
-            setAvaiableShedules(fetchResult);
-            setScheduleType(scheduleType);
-            nextStep();
-        }
-        catch (e) {
-            message.error('Não foi possível carregar os horários disponíveis');
-        }
-    };
-
-    const scheduleClick = schedule => {
-        setSchedule(schedule);
-        nextStep();
     };
 
     const clearForm = () => {
@@ -68,69 +63,143 @@ export default function () {
         form.resetFields();
     };
 
+    const resourceTypeClick = resourceType => {
+        setResourceType(resourceType);
+        getResourceTypeDetails(resourceType.id)
+            .then(data => setResources(data.resources))
+            .then(() => nextStep())
+            .catch(() => message.error('Não foi possível consultar detalhes do tipo de recurso'));
+    }
+
+    const resourceClick = resource => {
+        setResource(resource);
+        getResourceDetails(resource.id)
+            .then(data => setScheduleTypes(data.schedule_types))
+            .then(() => nextStep())
+            .catch(() => message.error('Não foi possível consultar detalhes do recurso'));
+    }
+
+    const scheduleTypeClick = scheduleType => {
+        setScheduleType(scheduleType);
+        getAvailableSchedules(resource.id, scheduleType.id)
+            .then(data => setAvaiableShedules(data))
+            .then(() => nextStep())
+            .catch(() => message.error('Não foi possível consultar a lista de horários disponíveis'));
+    };
+
+    const scheduleClick = schedule => {
+        setSchedule(schedule);
+        nextStep();
+    };
+
     const onFinish = values => {
         const scheduleData = {
             start: schedule.start,
             end: schedule.end,
             status: 'pendente'
-        }
-        try {
-            const data = {
-                resource: resource.id,
-                requester: extentedUser.id,
-                notes: values.notes,
-                schedules: [scheduleData]
-            };
-            postOrderWithSchedules(data);
-            clearForm();
-            message.success('Solicitação inserida com sucesso');
-        }
-        catch (e) {
-            message.error('Não foi possível criar sua solicitação');
-            console.log(e);
-        }
-    };
+        };
+        const data = {
+            resource: resource.id,
+            requester: user.extended_user.id,
+            notes: values.notes,
+            schedules: [scheduleData]
+        };
 
-    const disableDate = (currentDate) => {
-        const fCurrentDate = currentDate.format('YYYY-MM-DD');
-        return !avaiableDates.includes(fCurrentDate);
+        postOrderWithSchedules(data)
+            .then(() => {
+                clearForm();
+                message.success('Solicitação inserida com sucesso');
+            })
+            .catch(() => message.error('Não foi possível criar sua solicitação'));
     };
 
     useEffect(() => {
-        (async () => {
-            try {
-                const fetchResult = await getResourceDetails(resourceId);
-                setResource(fetchResult);
-            }
-            catch (e) {
-                message.error('Não foi possível carregar os tipos de agendas');
-            }
-        })();
-    }, []);
+        if (companyId) {
+            getCompanyDetails(companyId)
+                .then(data => setResourceTypes(data.resource_types))
+                .catch(error => message.error('Não foi possível consultar detalhes da empresa'));
+        }
+    }, [companyId]);
 
-    const formatLocaleDate = ISODateTimeString => {
-        const dateObj = new Date(ISODateTimeString);
-        return dateObj.toLocaleDateString(navigator.language);
-    };
 
-    const formatLocaleTime = ISODateTimeString => {
-        const dateObj = new Date(ISODateTimeString);
-        return dateObj.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' });
-    };
 
-    const formatLocaleDateTime = ISODateTimeString => {
-        return `${formatLocaleDate(ISODateTimeString)} - ${formatLocaleTime(ISODateTimeString)}`;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // const defaultDate = moment('2020-06-14');
+
+    // const [value, setValue] = useState(defaultDate);
+    // const [avaiableDates, setAvaiableDates] = useState(['2020-06-17', '2020-06-24', '2020-06-30']);
+
+    // const disableDate = (currentDate) => {
+    //     const fCurrentDate = currentDate.format('YYYY-MM-DD');
+    //     return !avaiableDates.includes(fCurrentDate);
+    // };
+
 
     const steps = [
         {
-            title: 'Tipo',
+            title: 'Tipo de Recurso',
             content: <div>
-                <Divider orientation="left">Tipo de Agenda</Divider>
+                <Divider orientation="left">
+                    Tipo de Recurso
+                </Divider>
                 <List
                     size="small"
                     bordered
-                    dataSource={resource?.schedule_types}
+                    dataSource={resourceTypes}
+                    renderItem={item => <List.Item>
+                        <Button type="link" block onClick={() => { resourceTypeClick(item) }}>
+                            {item.name}
+                        </Button>
+                    </List.Item>}
+                />
+            </div>,
+        },
+        {
+            title: 'Recurso',
+            content: <div>
+                <Divider orientation="left">Recursos de "{resourceType?.name}"</Divider>
+                <List
+                    size="small"
+                    bordered
+                    dataSource={resources}
+                    renderItem={item => <List.Item>
+                        <Button type="link" block onClick={() => resourceClick(item)}>
+                            {item.name}
+                        </Button>
+                    </List.Item>}
+                />
+            </div>,
+        },
+        {
+            title: 'Tipo de Agenda',
+            content: <div>
+                <Divider orientation="left">Tipos de agenda para "{resource?.name}"</Divider>
+                <List
+                    size="small"
+                    bordered
+                    dataSource={scheduleTypes}
                     renderItem={item => <List.Item>
                         <Button type="link" block onClick={() => scheduleTypeClick(item)}>
                             {item.name}
@@ -156,11 +225,14 @@ export default function () {
             </div>,
         },
         {
-            title: 'Informações',
+            title: 'Resumo',
             content: <div>
-                <Divider orientation="left">Informações</Divider>
+                <Divider orientation="left">Resumo da solicitação</Divider>
+                <Form.Item label="Recurso">
+                    <div>{resource?.name} ({resourceType?.name})</div>
+                </Form.Item>
                 <Form.Item label="Tipo">
-                    <div>{scheduleType?.name}</div>
+                    <div>{scheduleType?.name} ({scheduleType?.time} {scheduleType?.unit})</div>
                 </Form.Item>
                 <Form.Item label="Horário">
                     <div>
@@ -177,48 +249,49 @@ export default function () {
         },
     ];
 
-    const layout = {
-        labelCol: { span: 8 },
-        wrapperCol: { span: 16 },
-    };
-
     return (
         <div id="resource">
-            <h1>{resource?.name}</h1>
-
+            <h1>Solicitar utilização de recurso</h1>
             <Row>
-                <Col span={12}>
+                <Col md={8}>
                     <div className="site-calendar">
-                        <Calendar locale={ptBrLocale} fullscreen={false} value={value} disabledDate={disableDate} />
+                        <Calendar
+                            locale={ptBrLocale}
+                            fullscreen={false}
+                            // value={value}
+                            // disabledDate={disableDate}
+                        />
                     </div>
                 </Col>
-                <Col span={12}>
+                <Col md={16}>
                     <Form {...layout} onFinish={onFinish} form={form}>
-                        <Steps current={currentStep}>
-                            {steps.map(item => (
-                                <Step key={item.title} title={item.title} />
-                            ))}
-                        </Steps>
-                        <div className="steps-content">{steps[currentStep].content}</div>
-                        <div className="steps-action">
-                            {currentStep > 0 && (
-                                <Button style={{ margin: '0 8px' }} onClick={() => previousStep()}>
-                                    Voltar
+                        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                            <Steps current={currentStep} size="small">
+                                {steps.map(item => (
+                                    <Step key={item.title} title={item.title} />
+                                ))}
+                            </Steps>
+                            <div className="steps-content">{steps[currentStep].content}</div>
+                            <div className="steps-action">
+                                {currentStep > 0 && (
+                                    <Button style={{ margin: '0 8px' }} onClick={() => previousStep()}>
+                                        Voltar
+                                    </Button>
+                                )}
+                                {currentStep === steps.length - 1 && (
+                                    <Popconfirm
+                                        title="Confirma a solicitação?"
+                                        onConfirm={() => { form.submit() }}
+                                        okText="Sim"
+                                        cancelText="Não"
+                                    >
+                                        <Button type="primary" htmlType="submit">
+                                            Finalizar
                                 </Button>
-                            )}
-                            {currentStep === steps.length - 1 && (
-                                <Popconfirm
-                                    title="Confirma a solicitação?"
-                                    onConfirm={() => { form.submit() }}
-                                    okText="Sim"
-                                    cancelText="Não"
-                                >
-                                    <Button type="primary" htmlType="submit">
-                                        Finalizar
-                                </Button>
-                                </Popconfirm>
-                            )}
-                        </div>
+                                    </Popconfirm>
+                                )}
+                            </div>
+                        </Space>
                     </Form>
                 </Col>
             </Row>
