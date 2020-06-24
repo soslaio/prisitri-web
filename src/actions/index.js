@@ -2,6 +2,7 @@
 import { setToken, setUsername } from '../services/auth';
 import { getUserDetails as apiUserDetails, postLogin } from '../services/api';
 
+
 export const login = async (username, password) => {
     return postLogin(username, password)
         .then(data => data.access)
@@ -26,3 +27,7 @@ export const getUserDetails = username => {
             });
     }
 };
+
+export const setCompanyId = companyId => {
+    return { type: 'SET_COMPANYID', payload: { companyId: companyId } }
+}

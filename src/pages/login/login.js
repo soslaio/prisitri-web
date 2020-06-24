@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Form, Input, Button, Checkbox, message } from 'antd';
 import { useDispatch } from 'react-redux';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 
 import { getUserDetails, login } from '../../actions';
 import './login.scss';
