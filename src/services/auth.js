@@ -6,6 +6,11 @@ export function getToken() {
     return sessionStorage.getItem(ACCESS_TOKEN);
 }
 
+export function logoff() {
+    sessionStorage.removeItem(ACCESS_TOKEN);
+    sessionStorage.removeItem(USERNAME);
+}
+
 export function setToken(token) {
     sessionStorage.setItem(ACCESS_TOKEN, token);
 }

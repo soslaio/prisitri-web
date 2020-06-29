@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
-    Row, Col, List, Form, Input, Space, Steps,
+    Row, Col, List, Form, Input, Space, Steps, Skeleton,
     Button, Divider, message, Calendar, Popconfirm
 } from 'antd';
 
@@ -46,6 +46,7 @@ export default function () {
 
     // ui states
     const [currentStep, setCurrentStep] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     // ui methods
     const nextStep = () => {
@@ -117,33 +118,10 @@ export default function () {
         if (companyId) {
             getCompanyDetails(companyId)
                 .then(data => setResourceTypes(data.resource_types))
-                .catch(error => message.error('Não foi possível consultar detalhes da empresa'));
+                .catch(() => message.error('Não foi possível consultar detalhes da empresa'))
+                .finally(() => setLoading(false));
         }
     }, [companyId]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // const defaultDate = moment('2020-06-14');
@@ -164,16 +142,18 @@ export default function () {
                 <Divider orientation="left">
                     Tipo de Recurso
                 </Divider>
-                <List
-                    size="small"
-                    bordered
-                    dataSource={resourceTypes}
-                    renderItem={item => <List.Item>
-                        <Button type="link" block onClick={() => { resourceTypeClick(item) }}>
-                            {item.name}
-                        </Button>
-                    </List.Item>}
-                />
+                <Skeleton loading={loading} active>
+                    <List
+                        size="small"
+                        bordered
+                        dataSource={resourceTypes}
+                        renderItem={item => <List.Item>
+                            <Button type="link" block onClick={() => { resourceTypeClick(item) }}>
+                                {item.name}
+                            </Button>
+                        </List.Item>}
+                    />
+                </Skeleton>
             </div>,
         },
         {
@@ -258,8 +238,8 @@ export default function () {
                         <Calendar
                             locale={ptBrLocale}
                             fullscreen={false}
-                            // value={value}
-                            // disabledDate={disableDate}
+                        // value={value}
+                        // disabledDate={disableDate}
                         />
                     </div>
                 </Col>

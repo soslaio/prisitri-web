@@ -1,40 +1,86 @@
 
 import React, { useEffect, useState } from 'react';
-import { Card, Space } from 'antd';
+import { Table, message, Tooltip, Skeleton } from 'antd';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
-import { getCompanyDetails } from '../../services/api';
+
+import { getExtendedUserOrders } from '../../services/api';
+import { isAuthenticated } from '../../services/auth';
 
 
 export default function () {
 
-    const companyId = useSelector(state => state.companyId);
-    const [resourceTypes, setResourceTypes] = useState([]);
+    const user = useSelector(state => state.user);
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const getIconFromStatus = status => {
+        switch (status) {
+            case 'aprovado':
+                return (
+                    <Tooltip placement="right" title={<span>aprovado</span>}>
+                        <CheckCircleOutlined />
+                    </Tooltip>
+                );
+            case 'cancelado':
+                return (
+                    <Tooltip placement="right" title={<span>cancelado</span>}>
+                        <CloseCircleOutlined />
+                    </Tooltip>
+                );
+            default:
+                return (
+                    <Tooltip placement="right" title={<span>pendente</span>}>
+                        <ClockCircleOutlined />
+                    </Tooltip>
+                );
+        }
+    }
+
+    const columns = [
+        {
+            title: 'Recurso',
+            dataIndex: 'resource',
+            render: (value, record) => {
+                return (<span>{record.resource.name}</span>)
+            },
+        },
+        {
+            title: 'Horário',
+            dataIndex: 'schedules',
+            render: (value, record) => {
+                return (<div>{record.schedules[0].start}</div>)
+            },
+        },
+        {
+            title: 'Status',
+            dataIndex: 'schedules',
+            render: (value, record) => {
+                return (<div>{getIconFromStatus(record.schedules[0].status)}</div>)
+            },
+        }
+    ];
 
     useEffect(() => {
-        if (companyId) {
-            getCompanyDetails(companyId)
-                .then(data => setResourceTypes(data.resource_types));
+        if (isAuthenticated()) {
+            if (user) {
+                getExtendedUserOrders(user.extended_user.id)
+                    .then(data => setOrders(data))
+                    .catch(() => message.error('Não foi possível carregar a lista de solicitações'))
+                    .finally(() => setLoading(false));
+            }
         }
-    }, [companyId]);
+    }, [user]);
 
     return (
         <div id="home">
-            <h1>Tipo de recurso</h1>
+            <h1>Minhas solicitações</h1>
             <div className="resource-types-list">
-                {!companyId && <div>Selecione uma empresa</div>}
-                {resourceTypes.length == 0 && <div>Não há tipos cadastrados para a empresa selecionada</div>}
-                {resourceTypes &&
-                    <Space direction="vertical">
-                        {resourceTypes.map(resourceType => <Link to={`/tipos/${resourceType.id}`}>
-                            <Card style={{ width: 300 }} key={resourceType.id}>
-                                <p>{resourceType.name}</p>
-                            </Card>
-                        </Link>
-                        )}
-                    </Space>
-                }
+                <Skeleton loading={loading} active>
+                    {orders.length == 0 && <div>Você não possui solicitações</div>}
+                    <Table dataSource={orders} columns={columns} rowKey={record => record.id} />
+                </Skeleton>
             </div>
         </div>
     );

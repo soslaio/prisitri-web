@@ -74,3 +74,8 @@ export const getResourceDetails = async resourceId => {
     const url = `${apiServer}/resources/${resourceId}/`;
     return getApi(url);
 };
+
+export const getExtendedUserOrders = async extendedUserId => {
+    const url = `${apiServer}/extendedusers/${extendedUserId}/orders/`;
+    return getApi(url);
+};
