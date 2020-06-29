@@ -7,9 +7,8 @@ import Home from './pages/Home/home';
 import Login from './pages/Login/login';
 import Header from './components/Header/header';
 import Footer from './components/Footer/footer';
-import Resource from './pages/Resource/resource';
+import Resource from './pages/Order/order';
 import Breadcrumb from './components/Breadcrumb/breadcrumb';
-import ResourceType from './pages/ResourceType/resourceType';
 import { isAuthenticated } from './services/auth';
 
 import './App.scss';
@@ -36,8 +35,6 @@ export default function () {
                         <Route exact path="/login" component={Login} />
                         <PrivateRoute exact path="/" component={Home} />
                         <PrivateRoute exact path="/solicitar" component={Resource} />
-                        {/* <PrivateRoute exact path="/recursos/:resourceId" component={Resource} />
-                        <PrivateRoute exact path="/tipos/:resourceTypeId" component={ResourceType} /> */}
                     </Switch>
                 </div>
             </Content>

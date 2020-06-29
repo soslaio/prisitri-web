@@ -78,7 +78,7 @@ export default function () {
             <h1>Minhas solicitações</h1>
             <div className="resource-types-list">
                 <Skeleton loading={loading} active>
-                    {orders.length == 0 && <div>Você não possui solicitações</div>}
+                    {orders.length === 0 && <div>Você não possui solicitações</div>}
                     <Table dataSource={orders} columns={columns} rowKey={record => record.id} />
                 </Skeleton>
             </div>

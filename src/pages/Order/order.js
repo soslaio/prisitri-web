@@ -15,7 +15,7 @@ import {
     getResourceTypeDetails
 } from '../../services/api';
 
-import './resource.scss';
+import './order.scss';
 import ptBrLocale from '../../locale.json';
 
 const { Step } = Steps;
@@ -134,13 +134,17 @@ export default function () {
     //     return !avaiableDates.includes(fCurrentDate);
     // };
 
+    const translateTime = (time, unit) => {
+        return `${time} ${ptBrLocale.lang[unit]}`.toLowerCase();
+    }
+
 
     const steps = [
         {
             title: 'Tipo de Recurso',
             content: <div>
                 <Divider orientation="left">
-                    Tipo de Recurso
+                    Tipo de Recurso/Profissional
                 </Divider>
                 <Skeleton loading={loading} active>
                     <List
@@ -157,9 +161,12 @@ export default function () {
             </div>,
         },
         {
-            title: 'Recurso',
+            title: 'Recurso/Profissional',
             content: <div>
-                <Divider orientation="left">Recursos de "{resourceType?.name}"</Divider>
+                <Divider orientation="left">
+                    {resourceType?.nature === 'human' && <span>Profissional</span>}
+                    {resourceType?.nature === 'material' && <span>Recurso</span>}
+                </Divider>
                 <List
                     size="small"
                     bordered
@@ -182,7 +189,7 @@ export default function () {
                     dataSource={scheduleTypes}
                     renderItem={item => <List.Item>
                         <Button type="link" block onClick={() => scheduleTypeClick(item)}>
-                            {item.name}
+                            {item.name} ({translateTime(item.time, item.unit)})
                         </Button>
                     </List.Item>}
                 />
@@ -230,7 +237,7 @@ export default function () {
     ];
 
     return (
-        <div id="resource">
+        <div id="order">
             <h1>Solicitar utilização de recurso</h1>
             <Row>
                 <Col md={8}>
