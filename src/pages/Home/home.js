@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Table, message, Tooltip, Skeleton } from 'antd';
+import { Table, message, Skeleton, Button, Tag } from 'antd';
 import { useSelector } from 'react-redux';
 import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
@@ -15,32 +15,36 @@ export default function () {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const cancelOrder = orderId => {
+        console.log('>>>>>>>>>>', orderId);
+    };
+
     const getIconFromStatus = status => {
         switch (status) {
             case 'aprovado':
                 return (
-                    <Tooltip placement="right" title={<span>aprovado</span>}>
-                        <CheckCircleOutlined />
-                    </Tooltip>
+                    <Tag color="green">
+                        <CheckCircleOutlined /> Aprovado
+                    </Tag>
                 );
             case 'cancelado':
                 return (
-                    <Tooltip placement="right" title={<span>cancelado</span>}>
-                        <CloseCircleOutlined />
-                    </Tooltip>
+                    <Tag color="red">
+                        <CloseCircleOutlined /> Cancelado
+                    </Tag>
                 );
             default:
                 return (
-                    <Tooltip placement="right" title={<span>pendente</span>}>
-                        <ClockCircleOutlined />
-                    </Tooltip>
+                    <Tag color="blue">
+                        <ClockCircleOutlined /> Pendente
+                    </Tag>
                 );
         }
     }
 
     const columns = [
         {
-            title: 'Recurso',
+            title: 'Recurso/Profissional',
             dataIndex: 'resource',
             render: (value, record) => {
                 return (<span>{record.resource.name}</span>)
@@ -57,9 +61,22 @@ export default function () {
             title: 'Status',
             dataIndex: 'schedules',
             render: (value, record) => {
-                return (<div>{getIconFromStatus(record.schedules[0].status)}</div>)
+                return (
+                    <React.Fragment>
+                        {getIconFromStatus(record.schedules[0].status)}
+                    </React.Fragment>
+                )
             },
-        }
+        },
+        {
+            title: 'Ações',
+            key: 'acoes',
+            render: (text, record) => (
+                <Button type="link" block onClick={() => cancelOrder(record.id)}>
+                    Cancelar
+                </Button>
+            ),
+        },
     ];
 
     useEffect(() => {
