@@ -44,8 +44,8 @@ export const postLogin = async (username, password) => {
 };
 
 // lists
-export const getAvailableSchedules = async (resourceId, scheduleTypeId) => {
-    const url = `${apiServer}/resources/${resourceId}/availabilities/${scheduleTypeId}`;
+export const getAvailableSchedules = async (resourceId, scheduleTypeId, date) => {
+    const url = `${apiServer}/resources/${resourceId}/availabilities/${scheduleTypeId}/?date=${date}`;
     return getApi(url);
 };
 

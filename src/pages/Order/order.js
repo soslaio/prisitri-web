@@ -47,6 +47,7 @@ export default function () {
     // ui states
     const [currentStep, setCurrentStep] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [selectedDate, setSelectedDate] = useState();
 
     // ui methods
     const nextStep = () => {
@@ -58,10 +59,17 @@ export default function () {
     };
 
     const clearForm = () => {
+        setResourceType(null);
+        setResource(null);
         setScheduleType(null);
         setSchedule(null);
         setCurrentStep(0);
         form.resetFields();
+    };
+
+    const dateSelect = value => {
+        clearForm();
+        setSelectedDate(value.format('YYYY-MM-DD'));
     };
 
     const resourceTypeClick = resourceType => {
@@ -82,7 +90,7 @@ export default function () {
 
     const scheduleTypeClick = scheduleType => {
         setScheduleType(scheduleType);
-        getAvailableSchedules(resource.id, scheduleType.id)
+        getAvailableSchedules(resource.id, scheduleType.id, selectedDate)
             .then(data => setAvaiableShedules(data))
             .then(() => nextStep())
             .catch(() => message.error('Não foi possível consultar a lista de horários disponíveis'));
@@ -245,6 +253,7 @@ export default function () {
                         <Calendar
                             locale={ptBrLocale}
                             fullscreen={false}
+                            onSelect={dateSelect}
                         // value={value}
                         // disabledDate={disableDate}
                         />
