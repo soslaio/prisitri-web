@@ -1,11 +1,14 @@
 
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Avatar, Popover, List, Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { isAuthenticated, logoff } from '../../services/auth';
+import { logoff } from '../../services/auth';
 
 
 export default function () {
+
+    const user = useSelector(state => state.user);
 
     const logoffClick = () => {
         logoff();
@@ -26,7 +29,7 @@ export default function () {
 
     return (
         <React.Fragment>
-            {isAuthenticated() &&
+            {user &&
                 <Popover placement="bottomRight" content={content} trigger="click">
                     <Avatar size="large" icon={<UserOutlined />} style={{ marginLeft: '16px', cursor: 'pointer' }} />
                 </Popover>

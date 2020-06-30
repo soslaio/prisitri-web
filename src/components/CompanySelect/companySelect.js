@@ -17,7 +17,6 @@ export default function () {
     const [loading, setLoading] = useState(false);
 
     const companyChange = (value, option) => {
-        console.log('mudando a empresa');
         dispatch(setCompanyId(value));
         setSelectedCompany(value);
         return value;
@@ -42,7 +41,7 @@ export default function () {
 
     return (
         <React.Fragment>
-            {companies?.length > 0 &&
+            {user &&
                 <Select
                     value={selectedCompany}
                     style={{ width: 200 }}
