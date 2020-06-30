@@ -1,8 +1,11 @@
 
 import React from 'react';
-import { Table, Button, Popconfirm } from 'antd';
+import { Table, Button, Popconfirm, Avatar, Space } from 'antd';
 
 import StatusTag from '../StatusTag/statusTag';
+import MaterialIcon from '../../assets/material.png';
+import HumanIcon from '../../assets/human.png';
+import { formatLocaleDateTime, formatPrettyPeriod } from '../../util';
 
 
 export default function ({ dataSource }) {
@@ -17,16 +20,31 @@ export default function ({ dataSource }) {
             dataIndex: 'resource',
             render: (value, record) => {
                 const { name, nature } = record.resource.resource_type;
-                return (<React.Fragment>
-                    {nature == 'human' && <span>{name} ({record.resource.name})</span>}
-                    {nature == 'material' && <span>{record.resource.name}</span>}
-                </React.Fragment>)
+                return <Space>
+                    {nature === 'human' && <React.Fragment>
+                        <Avatar src={HumanIcon} size="small" />
+                        <span>{name} ({record.resource.name})</span>
+                    </React.Fragment>}
+                    {nature === 'material' && <React.Fragment>
+                        <Avatar src={MaterialIcon} size="small" />
+                        <span>{record.resource.name}</span>
+                    </React.Fragment>}
+                </Space>
             },
         },
         {
-            title: 'Horário',
+            title: 'Período',
             dataIndex: 'schedules',
-            render: (value, record) => <span>{record.schedules[0].start}</span>,
+            render: (value, record) => {
+                const { start, end } = record.schedules[0];
+                const { day, hour } = formatPrettyPeriod(start, end);
+                return (
+                    <React.Fragment>
+                        <div style={{ fontWeight: 'bold' }}>{day}</div>
+                        <span>{hour}</span>
+                    </React.Fragment>
+                );
+            }
         },
         {
             title: 'Status',
@@ -43,7 +61,7 @@ export default function ({ dataSource }) {
                     cancelText="Não"
                     onConfirm={() => { cancelOrder(record.id) }}
                 >
-                    <Button type="link" block disabled={record.schedules[0].status == 'cancelado'}>
+                    <Button type="link" block disabled={record.schedules[0].status === 'cancelado'}>
                         Cancelar
                 </Button>
                 </Popconfirm>
@@ -51,7 +69,9 @@ export default function ({ dataSource }) {
         },
     ];
 
-    return (
-        <Table dataSource={dataSource} columns={columns} rowKey={record => record.id} />
-    );
+    return <Table
+        dataSource={dataSource}
+        columns={columns}
+        rowKey={record => record.id}
+    />
 }
