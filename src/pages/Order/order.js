@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -47,7 +48,7 @@ export default function () {
     // ui states
     const [currentStep, setCurrentStep] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [selectedDate, setSelectedDate] = useState();
+    const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
 
     // ui methods
     const nextStep = () => {
@@ -74,26 +75,32 @@ export default function () {
 
     const resourceTypeClick = resourceType => {
         setResourceType(resourceType);
+        setLoading(true);
         getResourceTypeDetails(resourceType.id)
             .then(data => setResources(data.resources))
-            .then(() => nextStep())
+            .then(() => setLoading(false))
             .catch(() => message.error('Não foi possível consultar detalhes do tipo de recurso'));
+        nextStep();
     }
 
     const resourceClick = resource => {
         setResource(resource);
+        setLoading(true);
         getResourceDetails(resource.id)
             .then(data => setScheduleTypes(data.schedule_types))
-            .then(() => nextStep())
+            .then(() => setLoading(false))
             .catch(() => message.error('Não foi possível consultar detalhes do recurso'));
+        nextStep();
     }
 
     const scheduleTypeClick = scheduleType => {
         setScheduleType(scheduleType);
+        setLoading(true);
         getAvailableSchedules(resource.id, scheduleType.id, selectedDate)
             .then(data => setAvaiableShedules(data))
-            .then(() => nextStep())
+            .then(() => setLoading(false))
             .catch(() => message.error('Não foi possível consultar a lista de horários disponíveis'));
+        nextStep();
     };
 
     const scheduleClick = schedule => {
@@ -113,8 +120,10 @@ export default function () {
             notes: values.notes,
             schedules: [scheduleData]
         };
+        setLoading(true);
 
         postOrderWithSchedules(data)
+            .then(() => setLoading(false))
             .then(() => {
                 clearForm();
                 message.success('Solicitação inserida com sucesso');
@@ -130,7 +139,6 @@ export default function () {
                 .finally(() => setLoading(false));
         }
     }, [companyId]);
-
 
     // const defaultDate = moment('2020-06-14');
 
@@ -175,48 +183,54 @@ export default function () {
                     {resourceType?.nature === 'human' && <span>Profissional</span>}
                     {resourceType?.nature === 'material' && <span>Recurso</span>}
                 </Divider>
-                <List
-                    size="small"
-                    bordered
-                    dataSource={resources}
-                    renderItem={item => <List.Item>
-                        <Button type="link" block onClick={() => resourceClick(item)}>
-                            {item.name}
-                        </Button>
-                    </List.Item>}
-                />
+                <Skeleton loading={loading} active>
+                    <List
+                        size="small"
+                        bordered
+                        dataSource={resources}
+                        renderItem={item => <List.Item>
+                            <Button type="link" block onClick={() => resourceClick(item)}>
+                                {item.name}
+                            </Button>
+                        </List.Item>}
+                    />
+                </Skeleton>
             </div>,
         },
         {
             title: 'Tipo de Agenda',
             content: <div>
                 <Divider orientation="left">Tipos de agenda para "{resource?.name}"</Divider>
-                <List
-                    size="small"
-                    bordered
-                    dataSource={scheduleTypes}
-                    renderItem={item => <List.Item>
-                        <Button type="link" block onClick={() => scheduleTypeClick(item)}>
-                            {item.name} ({translateTime(item.time, item.unit)})
+                <Skeleton loading={loading} active>
+                    <List
+                        size="small"
+                        bordered
+                        dataSource={scheduleTypes}
+                        renderItem={item => <List.Item>
+                            <Button type="link" block onClick={() => scheduleTypeClick(item)}>
+                                {item.name} ({translateTime(item.time, item.unit)})
                         </Button>
-                    </List.Item>}
-                />
+                        </List.Item>}
+                    />
+                </Skeleton>
             </div>,
         },
         {
             title: 'Horário',
             content: <div>
                 <Divider orientation="left">Horários disponíveis</Divider>
-                <List
-                    size="small"
-                    bordered
-                    dataSource={avaiableShedules}
-                    renderItem={schedule => <List.Item>
-                        <Button type="link" block onClick={() => scheduleClick(schedule)}>
-                            {formatLocaleTime(schedule.start)} - {formatLocaleTime(schedule.end)}
-                        </Button>
-                    </List.Item>}
-                />
+                <Skeleton loading={loading} active>
+                    <List
+                        size="small"
+                        bordered
+                        dataSource={avaiableShedules}
+                        renderItem={schedule => <List.Item>
+                            <Button type="link" block onClick={() => scheduleClick(schedule)}>
+                                {formatLocaleTime(schedule.start)} - {formatLocaleTime(schedule.end)}
+                            </Button>
+                        </List.Item>}
+                    />
+                </Skeleton>
             </div>,
         },
         {
@@ -281,7 +295,7 @@ export default function () {
                                         okText="Sim"
                                         cancelText="Não"
                                     >
-                                        <Button type="primary" htmlType="submit">
+                                        <Button type="primary" htmlType="submit" loading={loading}>
                                             Finalizar
                                 </Button>
                                     </Popconfirm>
