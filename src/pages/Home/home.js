@@ -1,10 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
-import { Table, message, Skeleton, Button, Tag } from 'antd';
+import { Table, message, Skeleton, Button } from 'antd';
 import { useSelector } from 'react-redux';
-import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
-
+import StatusTag from '../../components/StatusTag/statusTag';
 import { getExtendedUserOrders } from '../../services/api';
 import { isAuthenticated } from '../../services/auth';
 
@@ -19,28 +18,7 @@ export default function () {
         console.log('>>>>>>>>>>', orderId);
     };
 
-    const getIconFromStatus = status => {
-        switch (status) {
-            case 'aprovado':
-                return (
-                    <Tag color="green">
-                        <CheckCircleOutlined /> Aprovado
-                    </Tag>
-                );
-            case 'cancelado':
-                return (
-                    <Tag color="red">
-                        <CloseCircleOutlined /> Cancelado
-                    </Tag>
-                );
-            default:
-                return (
-                    <Tag color="blue">
-                        <ClockCircleOutlined /> Pendente
-                    </Tag>
-                );
-        }
-    }
+
 
     const columns = [
         {
@@ -62,9 +40,7 @@ export default function () {
             dataIndex: 'schedules',
             render: (value, record) => {
                 return (
-                    <React.Fragment>
-                        {getIconFromStatus(record.schedules[0].status)}
-                    </React.Fragment>
+                    <StatusTag status={record.schedules[0].status} />
                 )
             },
         },
