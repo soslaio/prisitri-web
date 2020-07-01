@@ -19,14 +19,15 @@ export default function ({ dataSource }) {
             title: 'Recurso/Profissional',
             dataIndex: 'resource',
             render: (value, record) => {
-                const { name, nature } = record.resource.resource_type;
+                const { name, nature, image } = record.resource.resource_type;
                 return <Space>
+                    {image && <Avatar src={image} size="small" />}
                     {nature === 'human' && <React.Fragment>
-                        <Avatar src={HumanIcon} size="small" />
+                        {!image && <Avatar src={HumanIcon} size="small" />}
                         <span>{name} ({record.resource.name})</span>
                     </React.Fragment>}
                     {nature === 'material' && <React.Fragment>
-                        <Avatar src={MaterialIcon} size="small" />
+                        {!image && <Avatar src={MaterialIcon} size="small" />}
                         <span>{record.resource.name}</span>
                     </React.Fragment>}
                 </Space>
