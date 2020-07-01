@@ -71,6 +71,8 @@ export default function ({ dataSource }) {
     ];
 
     return <Table
+        size="small"
+        pagination={{ defaultPageSize: 8 }}
         dataSource={dataSource}
         columns={columns}
         rowKey={record => record.id}

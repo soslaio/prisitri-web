@@ -265,7 +265,6 @@ export default function () {
                 <Col md={8}>
                     <div className="site-calendar">
                         <Calendar
-                            locale={ptBrLocale}
                             fullscreen={false}
                             onSelect={dateSelect}
                         // value={value}
@@ -292,8 +291,6 @@ export default function () {
                                     <Popconfirm
                                         title="Confirma a solicitação?"
                                         onConfirm={() => { form.submit() }}
-                                        okText="Sim"
-                                        cancelText="Não"
                                     >
                                         <Button type="primary" htmlType="submit" loading={loading}>
                                             Finalizar
