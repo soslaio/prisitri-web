@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
     Row, Col, List, Form, Input, Space, Steps, Skeleton,
-    Button, Divider, message, Calendar, Popconfirm
+    Button, Divider, message, Calendar, Popconfirm, Avatar
 } from 'antd';
 
 import { formatLocaleTime, formatLocaleDateTime } from '../../util';
@@ -167,10 +167,13 @@ export default function () {
                         size="small"
                         bordered
                         dataSource={resourceTypes}
-                        renderItem={item => <List.Item>
-                            <Button type="link" block onClick={() => { resourceTypeClick(item) }}>
-                                {item.name}
-                            </Button>
+                        renderItem={item => <List.Item className="list-icon">
+                            <List.Item.Meta
+                                avatar={<Avatar src={item.image} />}
+                                onClick={() => { resourceTypeClick(item) }}
+                                title={item.name}
+                                description={item.description}
+                            />
                         </List.Item>}
                     />
                 </Skeleton>
