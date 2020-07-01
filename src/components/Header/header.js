@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 
 import UserMenu from '../../components/UserMenu/userMenu';
@@ -10,6 +10,15 @@ const { Header } = Layout;
 
 
 export default function () {
+
+    const location = useLocation();
+    const [selectedKeys, setSelectedKeys] = useState(null);
+
+    useEffect(() => {
+        const selectedKey = location.pathname != '/' ? location.pathname.replace('/', '') : 'home';
+        setSelectedKeys(selectedKey);
+    }, [location]);
+
     return (
         <Header>
             <div className="logo" />
@@ -17,13 +26,13 @@ export default function () {
                 <CompanySelect />
                 <UserMenu />
             </div>
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-                <Menu.Item key="1">
+            <Menu theme="dark" mode="horizontal" selectedKeys={selectedKeys}>
+                <Menu.Item key="home">
                     <Link to="/">
                         Minhas Solicitações
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="2">
+                <Menu.Item key="solicitar">
                     <Link to="/solicitar">
                         Solicitar
                     </Link>
