@@ -31,3 +31,17 @@ export const getUserDetails = username => {
 export const setCompanyId = companyId => {
     return { type: 'SET_COMPANYID', payload: { companyId: companyId } }
 }
+
+// export const setResourceType = (resourceType, loadDetails = false) => {
+//     return async dispatch => {
+//         if (loadDetails) {
+//             return getResourceTypeDetails(resourceType.id)
+//                 .then(data => { return { type: 'SET_RESOURCETYPE', payload: { resourceType: data } } })
+//                 .then(action => {
+//                     dispatch(action);
+//                     return action.payload.resourceType
+//                 })
+//         }
+//         return { type: 'SET_RESOURCETYPE', payload: { resourceType: resourceType } }
+//     }
+// }

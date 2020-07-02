@@ -11,6 +11,15 @@ function user(state = null, action) {
     }
 }
 
+// function resourceType(state = null, action) {
+//     switch (action.type) {
+//         case 'SET_RESOURCETYPE':
+//             return action.payload.resourceType;
+//         default:
+//             return state;
+//     }
+// }
+
 function companyId(state = null, action) {
     switch (action.type) {
         case 'SET_COMPANYID':
@@ -22,5 +31,6 @@ function companyId(state = null, action) {
 
 export default combineReducers({
     user,
+    //resourceType,
     companyId
 });

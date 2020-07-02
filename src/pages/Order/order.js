@@ -1,15 +1,15 @@
 
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
     Row, Col, List, Form, Input, Space, Steps, Skeleton,
-    Button, Divider, message, Calendar, Popconfirm, Avatar
+    Button, Divider, message, Calendar, Popconfirm
 } from 'antd';
 
+import ScheduleTypesList from '../../components/ScheduleTypesList/scheduleTypesList';
 import { formatLocaleTime, formatLocaleDateTime } from '../../util';
 import {
-    getCompanyDetails,
     getResourceDetails,
     getAvailableSchedules,
     postOrderWithSchedules,
@@ -31,11 +31,9 @@ export default function () {
     const [form] = Form.useForm();
 
     // redux
-    const companyId = useSelector(state => state.companyId);
     const user = useSelector(state => state.user);
 
     // list states
-    const [resourceTypes, setResourceTypes] = useState([]);
     const [scheduleTypes, setScheduleTypes] = useState([]);
     const [resources, setResources] = useState([]);
     const [avaiableShedules, setAvaiableShedules] = useState([]);
@@ -48,7 +46,7 @@ export default function () {
 
     // ui states
     const [currentStep, setCurrentStep] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
 
     // ui methods
@@ -132,15 +130,6 @@ export default function () {
             .catch(() => message.error('Não foi possível criar sua solicitação'));
     };
 
-    useEffect(() => {
-        if (companyId) {
-            getCompanyDetails(companyId)
-                .then(data => setResourceTypes(data.resource_types))
-                .catch(() => message.error('Não foi possível consultar detalhes da empresa'))
-                .finally(() => setLoading(false));
-        }
-    }, [companyId]);
-
     // const defaultDate = moment('2020-06-14');
 
     // const [value, setValue] = useState(defaultDate);
@@ -163,21 +152,7 @@ export default function () {
                 <Divider orientation="left">
                     Tipo de Recurso/Profissional
                 </Divider>
-                <Skeleton loading={loading} active>
-                    <List
-                        size="small"
-                        bordered
-                        dataSource={resourceTypes}
-                        renderItem={item => <List.Item className="list-icon">
-                            <List.Item.Meta
-                                avatar={<Avatar src={item.image} />}
-                                onClick={() => { resourceTypeClick(item) }}
-                                title={item.name}
-                                description={item.description}
-                            />
-                        </List.Item>}
-                    />
-                </Skeleton>
+                <ScheduleTypesList onClickHandler={resourceTypeClick} />
             </div>,
         },
         {

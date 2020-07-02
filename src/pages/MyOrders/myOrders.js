@@ -4,7 +4,7 @@ import { message, Skeleton } from 'antd';
 import { useSelector } from 'react-redux';
 
 import CompanyTemplate from '../../templates/CompanyTemplate/companyTemplate';
-import OrderTable from '../../components/OrderTable/orderTable';
+import OrdersTable from '../../components/OrdersTable/ordersTable';
 import { getExtendedUserOrders } from '../../services/api';
 
 
@@ -27,7 +27,7 @@ export default function () {
         <CompanyTemplate>
             <h1>Minhas solicitações</h1>
             <Skeleton loading={loading} active>
-                <OrderTable dataSource={orders} />
+                <OrdersTable dataSource={orders} />
             </Skeleton>
         </CompanyTemplate>
     );
