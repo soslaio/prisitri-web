@@ -26,11 +26,9 @@ export default function () {
     return (
         <CompanyTemplate>
             <h1>Minhas solicitações</h1>
-            <div className="resource-types-list">
-                <Skeleton loading={loading} active>
-                    <OrderTable dataSource={orders} />
-                </Skeleton>
-            </div>
+            <Skeleton loading={loading} active>
+                <OrderTable dataSource={orders} />
+            </Skeleton>
         </CompanyTemplate>
     );
 }

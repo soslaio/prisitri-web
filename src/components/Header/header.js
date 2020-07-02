@@ -6,6 +6,8 @@ import { Layout, Menu } from 'antd';
 import UserMenu from '../../components/UserMenu/userMenu';
 import CompanySelect from '../../components/CompanySelect/companySelect';
 
+import './header.scss';
+
 const { Header } = Layout;
 
 
@@ -21,7 +23,6 @@ export default function () {
 
     return (
         <Header>
-            <div className="logo" />
             <div className="companies-list">
                 <CompanySelect />
                 <UserMenu />

@@ -9,10 +9,14 @@ const { Content } = Layout;
 
 export default function (props) {
     return (
-        <Layout>
-            <Content className={props.className}>
-                {props.children}
-            </Content>
-        </Layout>
+        <div id="pre-layout">
+            <Layout>
+                <Content>
+                    <div className="content">
+                        {props.children}
+                    </div>
+                </Content>
+            </Layout>
+        </div>
     );
 }

@@ -15,6 +15,7 @@ import {
     postOrderWithSchedules,
     getResourceTypeDetails
 } from '../../services/api';
+import CompanyTemplate from '../../templates/CompanyTemplate/companyTemplate';
 
 import './order.scss';
 import ptBrLocale from '../../locale.json';
@@ -262,49 +263,52 @@ export default function () {
     ];
 
     return (
-        <div id="order">
-            <h1>Solicitar utilização de recurso</h1>
-            <Row>
-                <Col md={8}>
-                    <div className="site-calendar">
-                        <Calendar
-                            fullscreen={false}
-                            onSelect={dateSelect}
-                        // value={value}
-                        // disabledDate={disableDate}
-                        />
-                    </div>
-                </Col>
-                <Col md={16}>
-                    <Form {...layout} onFinish={onFinish} form={form}>
-                        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                            <Steps current={currentStep} size="small">
-                                {steps.map(item => (
-                                    <Step key={item.title} title={item.title} />
-                                ))}
-                            </Steps>
-                            <div className="steps-content">{steps[currentStep].content}</div>
-                            <div className="steps-action">
-                                {currentStep > 0 && (
-                                    <Button style={{ margin: '0 8px' }} onClick={() => previousStep()}>
-                                        Voltar
-                                    </Button>
-                                )}
-                                {currentStep === steps.length - 1 && (
-                                    <Popconfirm
-                                        title="Confirma a solicitação?"
-                                        onConfirm={() => { form.submit() }}
-                                    >
-                                        <Button type="primary" htmlType="submit" loading={loading}>
-                                            Finalizar
+        <CompanyTemplate>
+
+            <div id="order">
+                <h1>Solicitar utilização de recurso</h1>
+                <Row>
+                    <Col md={8}>
+                        <div className="site-calendar">
+                            <Calendar
+                                fullscreen={false}
+                                onSelect={dateSelect}
+                            // value={value}
+                            // disabledDate={disableDate}
+                            />
+                        </div>
+                    </Col>
+                    <Col md={16}>
+                        <Form {...layout} onFinish={onFinish} form={form}>
+                            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                                <Steps current={currentStep} size="small">
+                                    {steps.map(item => (
+                                        <Step key={item.title} title={item.title} />
+                                    ))}
+                                </Steps>
+                                <div className="steps-content">{steps[currentStep].content}</div>
+                                <div className="steps-action">
+                                    {currentStep > 0 && (
+                                        <Button style={{ margin: '0 8px' }} onClick={() => previousStep()}>
+                                            Voltar
+                                        </Button>
+                                    )}
+                                    {currentStep === steps.length - 1 && (
+                                        <Popconfirm
+                                            title="Confirma a solicitação?"
+                                            onConfirm={() => { form.submit() }}
+                                        >
+                                            <Button type="primary" htmlType="submit" loading={loading}>
+                                                Finalizar
                                 </Button>
-                                    </Popconfirm>
-                                )}
-                            </div>
-                        </Space>
-                    </Form>
-                </Col>
-            </Row>
-        </div>
+                                        </Popconfirm>
+                                    )}
+                                </div>
+                            </Space>
+                        </Form>
+                    </Col>
+                </Row>
+            </div>
+        </CompanyTemplate>
     );
 }

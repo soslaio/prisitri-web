@@ -13,22 +13,17 @@ const { Content } = Layout;
 
 export default function (props) {
     return (
-        // <Layout className="layout">
-        //     <Header />
-        //     <Content className="content">
-        //         <Breadcrumb />
-        //         <div className="site-layout-content">
-        //             {props.children}
-        //         </div>
-        //     </Content>
-        //     <Footer />
-        // </Layout>
-        <Layout>
-            <Header />
-            <Content className={props.className}>
-                <Breadcrumb />
-                {props.children}
-            </Content>
-        </Layout>
+        <div id="companyLayout">
+            <Layout>
+                <Header />
+                <Content>
+                    <Breadcrumb />
+                    <div className="company-content">
+                        {props.children}
+                    </div>
+                </Content>
+                <Footer />
+            </Layout>
+        </div>
     );
 }
