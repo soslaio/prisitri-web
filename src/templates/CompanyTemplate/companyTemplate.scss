@@ -1,8 +1,7 @@
 #companyLayout {
-    min-height: 100vh !important;
-
     .ant-layout {
         align-items: center;
+        min-height: 100vh;
     }
 
     .ant-layout-header {
@@ -12,8 +11,8 @@
     .ant-layout-content {
         background-color: white;
         padding: 2em;
-        flex-grow: unset !important;
-
+        flex-grow: unset;
+        min-height: 80vh;
         width: 90%;
     }
 }
