@@ -4,7 +4,9 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 
+import PreTemplate from '../../templates/PreTemplate/preTemplate';
 import { getUserDetails, login } from '../../actions';
+import Logo from '../../assets/prisitri-logo.png';
 import './login.scss';
 
 const layout = {
@@ -28,15 +30,20 @@ export default function () {
             .catch(error => {
                 if (error instanceof TypeError) {
                     message.error('Não foi possível efetuar a autenticação');
+                    console.log(error);
                 }
                 else {
                     message.error(error.message);
+                    console.log(error);
                 }
             });
     };
 
     return (
-        <div id="login">
+        <PreTemplate className="login">
+            <div className="logo">
+                <img src={Logo} />
+            </div>
             <Form
                 {...layout}
                 name="basic"
@@ -81,6 +88,6 @@ export default function () {
                     </Button>
                 </Form.Item>
             </Form>
-        </div>
+        </PreTemplate>
     );
 }

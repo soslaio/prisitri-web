@@ -32,9 +32,12 @@ export default function () {
             }
 
             if (user) {
-                setCompanies(user.extended_user.companies);
-                dispatch(setCompanyId(user.extended_user.companies[0].id));
-                setSelectedCompany(user.extended_user.companies[0].id);
+                const _companies = user.extended_user.companies;
+                if(_companies.length > 0){
+                    setCompanies(_companies);
+                    dispatch(setCompanyId(_companies[0].id));
+                    setSelectedCompany(_companies[0].id);
+                }
             }
         }
     }, [user]);

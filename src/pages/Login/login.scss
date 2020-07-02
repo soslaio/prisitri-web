@@ -1,4 +1,13 @@
-#login {
-    width: 50%;
-    margin: 10px auto;
+.login {
+    min-width: 400px;
+    // margin: 10px auto;
+    // background-color: red;
+}
+
+.logo {
+    text-align: center;
+    padding: 2em;
+}
+.logo img {
+    width: 100px;
 }

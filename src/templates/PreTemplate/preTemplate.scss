@@ -1,0 +1,12 @@
+
+.ant-layout {
+    min-height: 100vh !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.ant-layout-content {
+    background-color: white;
+    padding: 2em;
+    flex-grow: unset !important;
+}
