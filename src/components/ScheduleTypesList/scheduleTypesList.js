@@ -10,7 +10,7 @@ import './scheduleTypesList.scss';
 export default function ({ onClickHandler }) {
     const companyId = useSelector(state => state.companyId);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [resourceTypes, setResourceTypes] = useState([]);
 
     useEffect(() => {
