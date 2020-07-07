@@ -28,7 +28,7 @@ export default function ({ status }) {
                 );
             case 'partially_approved':
                 return (
-                    <Tag color="lime">
+                    <Tag color="cyan">
                         <CheckCircleOutlined /> Aprovado parcialmente
                     </Tag>
                 );

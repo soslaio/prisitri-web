@@ -30,22 +30,22 @@ export default function ({ dataSource, loading }) {
             dataIndex: 'schedules',
             render: (value, record) => <StatusTag status={record.status} />,
         },
-        {
-            title: 'Ações',
-            key: 'acoes',
-            render: (text, record) => (
-                <Popconfirm
-                    title="Tem certeza que deseja cancelar?"
-                    okText="Sim"
-                    cancelText="Não"
-                    onConfirm={() => { cancelOrder(record.id) }}
-                >
-                    <Button type="link" block disabled={record.schedules[0].status === 'cancelado'}>
-                        Cancelar
-                </Button>
-                </Popconfirm>
-            ),
-        },
+        // {
+        //     title: 'Ações',
+        //     key: 'acoes',
+        //     render: (text, record) => (
+        //         <Popconfirm
+        //             title="Tem certeza que deseja cancelar?"
+        //             okText="Sim"
+        //             cancelText="Não"
+        //             onConfirm={() => { cancelOrder(record.id) }}
+        //         >
+        //             <Button type="link" block disabled={record.schedules[0].status === 'cancelado'}>
+        //                 Cancelar
+        //         </Button>
+        //         </Popconfirm>
+        //     ),
+        // },
     ];
 
     return <Table
@@ -55,5 +55,6 @@ export default function ({ dataSource, loading }) {
         columns={columns}
         rowKey={record => record.id}
         loading={loading}
+        className="components-table-demo-nested"
     />
 }
