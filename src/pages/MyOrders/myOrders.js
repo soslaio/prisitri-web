@@ -26,9 +26,7 @@ export default function () {
     return (
         <CompanyTemplate>
             <h1>Minhas solicitações</h1>
-            <Skeleton loading={loading} active>
-                <OrdersTable dataSource={orders} />
-            </Skeleton>
+            <OrdersTable dataSource={orders} loading={loading} />
         </CompanyTemplate>
     );
 }

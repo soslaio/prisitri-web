@@ -1,20 +1,38 @@
 
 import React from 'react';
 import { Tag } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 
 export default function ({ status }) {
 
     const getIconFromStatus = status => {
         switch (status) {
-            case 'aprovado':
+            case 'pending':
+                return (
+                    <Tag color="geekblue">
+                        <ClockCircleOutlined /> Pendente
+                    </Tag>
+                );
+            case 'waiting_approval':
+                return (
+                    <Tag color="blue">
+                        <ClockCircleOutlined /> Aguardando
+                    </Tag>
+                );
+            case 'approved':
                 return (
                     <Tag color="green">
                         <CheckCircleOutlined /> Aprovado
                     </Tag>
                 );
-            case 'cancelado':
+            case 'partially_approved':
+                return (
+                    <Tag color="lime">
+                        <CheckCircleOutlined /> Aprovado parcialmente
+                    </Tag>
+                );
+            case 'canceled':
                 return (
                     <Tag color="red">
                         <CloseCircleOutlined /> Cancelado
@@ -22,8 +40,8 @@ export default function ({ status }) {
                 );
             default:
                 return (
-                    <Tag color="blue">
-                        <ClockCircleOutlined /> Pendente
+                    <Tag>
+                        <QuestionCircleOutlined /> Desconhecido
                     </Tag>
                 );
         }
