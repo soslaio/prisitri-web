@@ -11,6 +11,15 @@ function user(state = null, action) {
     }
 }
 
+function company(state = null, action) {
+    switch (action.type) {
+        case 'SET_COMPANY':
+            return action.payload.company;
+        default:
+            return state;
+    }
+}
+
 // function resourceType(state = null, action) {
 //     switch (action.type) {
 //         case 'SET_RESOURCETYPE':
@@ -20,17 +29,18 @@ function user(state = null, action) {
 //     }
 // }
 
-function companyId(state = null, action) {
-    switch (action.type) {
-        case 'SET_COMPANYID':
-            return action.payload.companyId;
-        default:
-            return state;
-    }
-}
+// function companyId(state = null, action) {
+//     switch (action.type) {
+//         case 'SET_COMPANYID':
+//             return action.payload.companyId;
+//         default:
+//             return state;
+//     }
+// }
 
 export default combineReducers({
     user,
+    company
     //resourceType,
-    companyId
+    // companyId
 });

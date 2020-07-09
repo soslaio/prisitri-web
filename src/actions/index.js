@@ -1,6 +1,6 @@
 
 import { setToken, setUsername } from '../services/auth';
-import { getUserDetails as apiUserDetails, postLogin } from '../services/api';
+import { getUserDetails as apiUserDetails, getCompanyDetails as apiCompanyDetails, postLogin } from '../services/api';
 
 
 export const login = async (username, password) => {
@@ -28,9 +28,20 @@ export const getUserDetails = username => {
     }
 };
 
-export const setCompanyId = companyId => {
-    return { type: 'SET_COMPANYID', payload: { companyId: companyId } }
-}
+export const getCompanyDetails = id => {
+    return async dispatch => {
+        return apiCompanyDetails(id)
+            .then(data => { return { type: 'SET_COMPANY', payload: { company: data } } })
+            .then(action => {
+                dispatch(action);
+                return action.payload.company;
+            });
+    }
+};
+
+// export const setCompanyId = companyId => {
+//     return { type: 'SET_COMPANYID', payload: { companyId: companyId } }
+// }
 
 // export const setResourceType = (resourceType, loadDetails = false) => {
 //     return async dispatch => {

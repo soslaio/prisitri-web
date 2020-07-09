@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 
 import UserMenu from '../../components/UserMenu/userMenu';
-import CompanySelect from '../../components/CompanySelect/companySelect';
+import UnitSelect from '../../components/UnitSelect/unitSelect';
 
 import './header.scss';
 
@@ -24,7 +24,7 @@ export default function () {
     return (
         <Header>
             <div className="companies-list">
-                <CompanySelect />
+                <UnitSelect />
                 <UserMenu />
             </div>
             <Menu theme="dark" mode="horizontal" selectedKeys={selectedKeys}>
