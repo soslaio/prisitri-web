@@ -17,7 +17,7 @@ export default function () {
     const [selectedKeys, setSelectedKeys] = useState(null);
 
     useEffect(() => {
-        const selectedKey = location.pathname != '/' ? location.pathname.replace('/', '') : 'home';
+        const selectedKey = location.pathname !== '/' ? location.pathname.replace('/', '') : 'home';
         setSelectedKeys(selectedKey);
     }, [location]);
 

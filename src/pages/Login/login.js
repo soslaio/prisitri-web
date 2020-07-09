@@ -45,7 +45,7 @@ export default function () {
     return (
         <PreTemplate className="login">
             <div className="logo">
-                <img src={Logo} />
+                <img alt="prisitri" src={Logo} />
             </div>
             <Form
                 {...layout}

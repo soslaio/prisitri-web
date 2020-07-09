@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { message, Skeleton } from 'antd';
+import { message } from 'antd';
 import { useSelector } from 'react-redux';
 
 import CompanyTemplate from '../../templates/CompanyTemplate/companyTemplate';

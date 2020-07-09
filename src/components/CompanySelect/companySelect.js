@@ -39,7 +39,7 @@ export default function () {
                     setSelectedCompany(_companies[0].id);
                 }
             }
-        }
+        }  // eslint-disable-next-line
     }, [user]);
 
     return (

@@ -1,22 +1,15 @@
 
 import React from 'react';
-import { Table, Button, Popconfirm, Avatar, Space } from 'antd';
+import { Table } from 'antd';
 
 import StatusTag from '../StatusTag/statusTag';
-import MaterialIcon from '../../assets/material.png';
-import HumanIcon from '../../assets/human.png';
-import { formatLocaleDateTime, formatPrettyPeriod, formatLocaleDate } from '../../util';
+import { formatLocaleDate } from '../../util';
 
 
 export default function ({ dataSource, loading }) {
-
-    const cancelOrder = orderId => {
-        console.log('>>>>>>>>>>', orderId);
-    };
-
     const columns = [
         {
-            title: 'Recurso/Profissional',
+            title: 'Recursos',
             dataIndex: 'resource',
             render: (value, record) => record.schedules.map(schedule => schedule.resource.resource_type.name).join(', ')
         },
@@ -29,23 +22,7 @@ export default function ({ dataSource, loading }) {
             title: 'Status',
             dataIndex: 'schedules',
             render: (value, record) => <StatusTag status={record.status} />,
-        },
-        // {
-        //     title: 'Ações',
-        //     key: 'acoes',
-        //     render: (text, record) => (
-        //         <Popconfirm
-        //             title="Tem certeza que deseja cancelar?"
-        //             okText="Sim"
-        //             cancelText="Não"
-        //             onConfirm={() => { cancelOrder(record.id) }}
-        //         >
-        //             <Button type="link" block disabled={record.schedules[0].status === 'cancelado'}>
-        //                 Cancelar
-        //         </Button>
-        //         </Popconfirm>
-        //     ),
-        // },
+        }
     ];
 
     return <Table
@@ -55,6 +32,5 @@ export default function ({ dataSource, loading }) {
         columns={columns}
         rowKey={record => record.id}
         loading={loading}
-        className="components-table-demo-nested"
     />
 }
