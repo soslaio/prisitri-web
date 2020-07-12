@@ -25,11 +25,11 @@ export default function (props) {
             const username = getUsername();
             dispatch(getUserDetails(username))
                 .catch(() => message.error('Não foi possível carregar os dados do usuário'));
-
-            dispatch(getCompanyDetails(companyId))
-                .catch(() => message.error('Não foi possível carregar os dados da empresa'));
         }
-    });
+
+        dispatch(getCompanyDetails(companyId))
+            .catch(() => message.error('Não foi possível carregar os dados da empresa'));
+    }, []);
 
     return (
         <div id="companyLayout">
