@@ -27,9 +27,15 @@ export default function () {
     const onFinish = values => {
         setLoading(true);
         login(values.username, values.password)
-            .then(() => dispatch(getUserDetails(values.username)))
-            .then(() => history.push('/'))
+            .then(() => {
+                dispatch(getUserDetails(values.username))
+                    .then(() => {
+                        setLoading(false);
+                        history.push('/')
+                    })
+            })
             .catch(error => {
+                setLoading(false);
                 if (error instanceof TypeError) {
                     message.error('Não foi possível efetuar a autenticação');
                     console.log(error);
@@ -38,8 +44,7 @@ export default function () {
                     message.error(error.message);
                     console.log(error);
                 }
-            })
-            .finally(() => setLoading(false));
+            });
     };
 
     return (

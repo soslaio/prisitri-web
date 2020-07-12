@@ -6,8 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import Header from '../../components/Header/header';
 import Footer from '../../components/Footer/footer';
 import Breadcrumb from '../../components/Breadcrumb/breadcrumb';
-import { getUserDetails } from '../../actions';
+import { companyId } from '../../config';
 import { getUsername } from '../../services/auth';
+import { getUserDetails, getCompanyDetails } from '../../actions';
 
 import './companyTemplate.scss';
 
@@ -23,7 +24,10 @@ export default function (props) {
         if (!user) {
             const username = getUsername();
             dispatch(getUserDetails(username))
-                .catch(() => message.error('Não foi possível carregar os dados do usuário'))
+                .catch(() => message.error('Não foi possível carregar os dados do usuário'));
+
+            dispatch(getCompanyDetails(companyId))
+                .catch(() => message.error('Não foi possível carregar os dados da empresa'));
         }
     });
 
