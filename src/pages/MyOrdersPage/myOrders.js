@@ -11,10 +11,11 @@ export default function () {
 
     const user = useSelector(state => state.user);
     const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (user) {
+            setLoading(true);
             getExtendedUserOrders(user.extended_user.id)
                 .then(data => setOrders(data))
                 .catch(() => message.error('Não foi possível carregar a lista de solicitações'))
@@ -25,7 +26,7 @@ export default function () {
     return (
         <React.Fragment>
             <h1>Minhas solicitações</h1>
-            <OrdersTable dataSource={orders} loading={loading} />
+            <OrdersTable orders={orders} loading={loading} />
         </React.Fragment>
     );
 }

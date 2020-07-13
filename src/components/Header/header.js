@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
 import UserMenu from '../../components/UserMenu/userMenu';
-import UnitSelect from '../../components/UnitSelect/unitSelect';
+import { CompanyUnitSelectContainer } from '../../containers/CompanyUnitSelect';
 
 import './header.scss';
 
@@ -27,7 +27,7 @@ export default function () {
     return (
         <Header id="header">
             <div className="right-menu">
-                <UnitSelect />
+                <CompanyUnitSelectContainer />
                 <UserMenu />
             </div>
             <div className="logo">

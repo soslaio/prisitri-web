@@ -7,7 +7,7 @@ import {
     Button, Divider, message, Calendar, Popconfirm
 } from 'antd';
 
-import { UnitResourceTypesListContainer } from '../../containers/UnitResourceTypes';
+import { UnitResourceTypesListContainer } from '../../containers/UnitResourceTypesList';
 import { formatLocaleTime, formatLocaleDateTime } from '../../helpers/dateTime';
 import {
     getResourceDetails,
@@ -31,7 +31,6 @@ export default function () {
 
     // redux
     const user = useSelector(state => state.user);
-    const unit = useSelector(state => state.unit);
 
     // list states
     const [scheduleTypes, setScheduleTypes] = useState([]);
