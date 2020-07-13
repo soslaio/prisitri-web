@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Form, Input, Button, Checkbox, message } from 'antd';
+import { Form, Input, Button, Checkbox, Row, Col, message } from 'antd';
 
-import PreTemplate from '../../templates/PreTemplate/preTemplate';
 import { getUserDetails, login } from '../../actions';
 import Logo from '../../assets/prisitri-logo.png';
 import './login.scss';
@@ -48,54 +47,67 @@ export default function () {
     };
 
     return (
-        <PreTemplate className="login">
-            <div className="logo">
-                <img alt="prisitri" src={Logo} />
-            </div>
-            <Form
-                {...layout}
-                name="basic"
-                onFinish={onFinish}
-                initialValues={{
-                    remember: true,
-                }}
-            >
-                <Form.Item
-                    label="Usuário"
-                    name="username"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Insira seu nome de usuário',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
+        <div id="login">
+            <Row>
+                <Col span={24}>
+                    <div className="logo">
+                        <img alt="prisitri" src={Logo} />
+                    </div>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={24}>
 
-                <Form.Item
-                    label="Senha"
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Insira sua senha',
-                        },
-                    ]}
-                >
-                    <Input.Password />
-                </Form.Item>
 
-                <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                    <Checkbox>Lembrar usuário</Checkbox>
-                </Form.Item>
+                    <Form
+                        {...layout}
+                        name="basic"
+                        onFinish={onFinish}
+                        initialValues={{
+                            remember: true,
+                        }}
+                    >
+                        <Form.Item
+                            label="Usuário"
+                            name="username"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Insira seu nome de usuário',
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
 
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit" loading={loading}>
-                        Entrar
+                        <Form.Item
+                            label="Senha"
+                            name="password"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Insira sua senha',
+                                },
+                            ]}
+                        >
+                            <Input.Password />
+                        </Form.Item>
+
+                        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+                            <Checkbox>Lembrar usuário</Checkbox>
+                        </Form.Item>
+
+                        <Form.Item {...tailLayout}>
+                            <Button type="primary" htmlType="submit" loading={loading}>
+                                Entrar
                     </Button>
-                </Form.Item>
-            </Form>
-        </PreTemplate>
+                        </Form.Item>
+                    </Form>
+
+                </Col>
+            </Row>
+
+
+        </div>
     );
 }

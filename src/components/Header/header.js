@@ -31,7 +31,12 @@ export default function () {
                 <UserMenu />
             </div>
             <div className="logo">
-                <Avatar src={company?.logo} size={55} style={{ marginRight: '26px' }} />
+                {company?.logo && <Avatar src={company?.logo}
+                    size={55}
+                    style={{
+                        marginRight: '26px',
+                        backgroundColor: 'white'
+                    }} />}
             </div>
             <Menu theme="dark" mode="horizontal" selectedKeys={selectedKeys}>
                 <Menu.Item key="home">

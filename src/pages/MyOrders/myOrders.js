@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
 import { useSelector } from 'react-redux';
 
-import CompanyTemplate from '../../templates/CompanyTemplate/companyTemplate';
 import OrdersTable from '../../components/OrdersTable/ordersTable';
 import { getExtendedUserOrders } from '../../services/api';
 
@@ -24,9 +23,9 @@ export default function () {
     }, [user]);
 
     return (
-        <CompanyTemplate>
+        <React.Fragment>
             <h1>Minhas solicitações</h1>
             <OrdersTable dataSource={orders} loading={loading} />
-        </CompanyTemplate>
+        </React.Fragment>
     );
 }

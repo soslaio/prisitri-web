@@ -20,6 +20,15 @@ function company(state = null, action) {
     }
 }
 
+function unit(state = null, action) {
+    switch (action.type) {
+        case 'SET_UNIT':
+            return action.payload.unit;
+        default:
+            return state;
+    }
+}
+
 // function resourceType(state = null, action) {
 //     switch (action.type) {
 //         case 'SET_RESOURCETYPE':
@@ -40,7 +49,8 @@ function company(state = null, action) {
 
 export default combineReducers({
     user,
-    company
+    company,
+    unit
     //resourceType,
     // companyId
 });

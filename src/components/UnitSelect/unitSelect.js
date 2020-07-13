@@ -1,23 +1,32 @@
 
 import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { setUnit } from '../../actions';
 
 
 export default function () {
 
+    const dispatch = useDispatch();
     const company = useSelector(state => state.company);
     const [units, setUnits] = useState([]);
     const [selectedUnit, setSelectedUnit] = useState(null);
 
-    const unitChange = value => {
+    const unitChange = (value, opt) => {
+        dispatch(setUnit({
+            id: opt.value,
+            name: opt.label
+        }))
         setSelectedUnit(value);
         return value;
     }
 
     useEffect(() => {
         if (company) {
-            setUnits(company.units)
+            console.log('unitselect useeffect')
+            setUnits(company.units);
+            setSelectedUnit(company.units[0].id);
         }
     }, [company]);
 
