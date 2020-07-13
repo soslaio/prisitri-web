@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
     Row, Col, List, Form, Input, Space, Steps, Skeleton,
@@ -31,11 +31,13 @@ export default function () {
 
     // redux
     const user = useSelector(state => state.user);
+    const unit = useSelector(state => state.unit);
 
     // list states
     const [scheduleTypes, setScheduleTypes] = useState([]);
     const [resources, setResources] = useState([]);
     const [avaiableShedules, setAvaiableShedules] = useState([]);
+    const [resourceTypes, setResourceTypes] = useState([]);
 
     // object states
     const [resourceType, setResourceType] = useState(null);
@@ -143,6 +145,11 @@ export default function () {
         return `${time} ${ptBrLocale.lang[unit]}`.toLowerCase();
     }
 
+    useEffect(() => {
+        if (unit) {
+            setResourceTypes(unit.resource_types);
+        }
+    }, [unit])
 
     const steps = [
         {
@@ -151,7 +158,7 @@ export default function () {
                 <Divider orientation="left">
                     Tipo de Recurso/Profissional
                 </Divider>
-                <ScheduleTypesList onClickHandler={resourceTypeClick} />
+                <ScheduleTypesList dataSource={resourceTypes} onClick={resourceTypeClick} />
             </div>,
         },
         {

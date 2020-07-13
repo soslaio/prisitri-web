@@ -65,6 +65,11 @@ export const getCompanyDetails = async companyId => {
     return getApi(url);
 };
 
+export const getUnitDetails = async unitId => {
+    const url = `${apiServer}/units/${unitId}/`;
+    return getApi(url);
+};
+
 export const getResourceTypeDetails = async resourceTypeId => {
     const url = `${apiServer}/resourcetypes/${resourceTypeId}/`;
     return getApi(url);

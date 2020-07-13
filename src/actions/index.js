@@ -1,6 +1,9 @@
 
 import { setToken, setUsername } from '../services/auth';
-import { getUserDetails as apiUserDetails, getCompanyDetails as apiCompanyDetails, postLogin } from '../services/api';
+import {
+    getUserDetails as apiUserDetails, getCompanyDetails as apiCompanyDetails, postLogin,
+    getUnitDetails as apiUnitDetails
+} from '../services/api';
 
 
 export const login = async (username, password) => {
@@ -39,9 +42,20 @@ export const getCompanyDetails = id => {
     }
 };
 
-export const setUnit = unit => ({
-    type: 'SET_UNIT',
-    payload: {
-        unit: unit
+export const getUnitDetails = id => {
+    return async dispatch => {
+        return apiUnitDetails(id)
+            .then(data => { return { type: 'SET_UNIT', payload: { unit: data } } })
+            .then(action => {
+                dispatch(action);
+                return action.payload.unit;
+            });
     }
-});
+};
+
+// export const setUnit = unit => ({
+//     type: 'SET_UNIT',
+//     payload: {
+//         unit: unit
+//     }
+// });

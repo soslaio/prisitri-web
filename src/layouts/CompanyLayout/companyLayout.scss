@@ -1,14 +1,18 @@
-#login-layout {
+#companyLayout {
     .ant-layout {
-        min-height: 100vh;
         align-items: center;
-        justify-content: center;
+        min-height: 100vh;
+    }
+
+    .ant-layout-header {
+        width: 100%;
     }
 
     .ant-layout-content {
         background-color: white;
         padding: 2em;
         flex-grow: unset;
-        min-width: 456px;
+        min-height: 80vh;
+        width: 90%;
     }
 }

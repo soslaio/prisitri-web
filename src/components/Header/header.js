@@ -31,12 +31,14 @@ export default function () {
                 <UserMenu />
             </div>
             <div className="logo">
-                {company?.logo && <Avatar src={company?.logo}
-                    size={55}
-                    style={{
-                        marginRight: '26px',
-                        backgroundColor: 'white'
-                    }} />}
+                <Link to="/">
+                    {company?.logo && <Avatar src={company?.logo}
+                        size={55}
+                        style={{
+                            marginRight: '26px',
+                            backgroundColor: 'white'
+                        }} />}
+                </Link>
             </div>
             <Menu theme="dark" mode="horizontal" selectedKeys={selectedKeys}>
                 <Menu.Item key="home">

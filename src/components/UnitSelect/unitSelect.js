@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { Select } from 'antd';
+import { Select, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setUnit } from '../../actions';
+import { getUnitDetails } from '../../actions';
 
 
 export default function () {
@@ -13,20 +13,20 @@ export default function () {
     const [units, setUnits] = useState([]);
     const [selectedUnit, setSelectedUnit] = useState(null);
 
-    const unitChange = (value, opt) => {
-        dispatch(setUnit({
-            id: opt.value,
-            name: opt.label
-        }))
+    const unitChange = value => {
         setSelectedUnit(value);
+        dispatch(getUnitDetails(value))
+            .catch(() => message.error('Não foi possível carregar os dados da unidade'));
         return value;
     }
 
     useEffect(() => {
         if (company) {
-            console.log('unitselect useeffect')
             setUnits(company.units);
-            setSelectedUnit(company.units[0].id);
+            const { id } = company.units[0];
+            setSelectedUnit(id);
+            dispatch(getUnitDetails(id))
+                .catch(() => message.error('Não foi possível carregar os dados da unidade'));
         }
     }, [company]);
 
