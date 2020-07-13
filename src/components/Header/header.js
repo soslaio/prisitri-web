@@ -1,7 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Avatar } from 'antd';
 import { Layout, Menu } from 'antd';
+import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 
 import UserMenu from '../../components/UserMenu/userMenu';
 import UnitSelect from '../../components/UnitSelect/unitSelect';
@@ -14,6 +16,7 @@ const { Header } = Layout;
 export default function () {
 
     const location = useLocation();
+    const company = useSelector(state => state.company);
     const [selectedKeys, setSelectedKeys] = useState(null);
 
     useEffect(() => {
@@ -26,6 +29,9 @@ export default function () {
             <div className="companies-list">
                 <UnitSelect />
                 <UserMenu />
+            </div>
+            <div className="logo">
+                <Avatar src={company?.logo} size={55} style={{ marginRight: '26px' }} />
             </div>
             <Menu theme="dark" mode="horizontal" selectedKeys={selectedKeys}>
                 <Menu.Item key="home">

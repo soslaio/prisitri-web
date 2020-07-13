@@ -29,7 +29,9 @@ export default function (props) {
 
         dispatch(getCompanyDetails(companyId))
             .catch(() => message.error('Não foi possível carregar os dados da empresa'));
-    }, []);
+
+        // eslint-disable-next-line
+    }, [user]);
 
     return (
         <div id="companyLayout">
