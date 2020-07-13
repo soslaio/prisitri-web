@@ -28,6 +28,7 @@ export default function () {
             dispatch(getUnitDetails(id))
                 .catch(() => message.error('Não foi possível carregar os dados da unidade'));
         }
+        // eslint-disable-next-line
     }, [company]);
 
     return (

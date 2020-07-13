@@ -3,7 +3,7 @@ import React from 'react';
 import { Table } from 'antd';
 
 import StatusTag from '../StatusTag/statusTag';
-import { formatLocaleDate } from '../../util';
+import { formatLocaleDate } from '../../helpers/dateTime';
 
 
 export default function ({ dataSource, loading }) {

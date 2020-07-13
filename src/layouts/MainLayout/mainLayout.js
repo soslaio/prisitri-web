@@ -11,7 +11,7 @@ import { getUserDetails, getCompanyDetails } from '../../actions';
 import { getUsername, isAuthenticated } from '../../services/auth';
 import { companyId } from '../../config';
 
-import './companyLayout.scss';
+import './mainLayout.scss';
 
 const { Content } = Layout;
 
@@ -24,8 +24,7 @@ const CompanyLayout = ({ children }) => {
 
     useEffect(() => {
         if (!user) {
-            const username = getUsername();
-            dispatch(getUserDetails(username))
+            dispatch(getUserDetails(getUsername()))
                 .catch(() => message.error('Não foi possível carregar os dados do usuário'));
         }
 

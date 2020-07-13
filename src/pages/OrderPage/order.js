@@ -1,14 +1,14 @@
 
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
     Row, Col, List, Form, Input, Space, Steps, Skeleton,
     Button, Divider, message, Calendar, Popconfirm
 } from 'antd';
 
-import ScheduleTypesList from '../../components/ScheduleTypesList/scheduleTypesList';
-import { formatLocaleTime, formatLocaleDateTime } from '../../util';
+import { UnitResourceTypesListContainer } from '../../containers/UnitResourceTypes';
+import { formatLocaleTime, formatLocaleDateTime } from '../../helpers/dateTime';
 import {
     getResourceDetails,
     getAvailableSchedules,
@@ -37,7 +37,6 @@ export default function () {
     const [scheduleTypes, setScheduleTypes] = useState([]);
     const [resources, setResources] = useState([]);
     const [avaiableShedules, setAvaiableShedules] = useState([]);
-    const [resourceTypes, setResourceTypes] = useState([]);
 
     // object states
     const [resourceType, setResourceType] = useState(null);
@@ -145,12 +144,6 @@ export default function () {
         return `${time} ${ptBrLocale.lang[unit]}`.toLowerCase();
     }
 
-    useEffect(() => {
-        if (unit) {
-            setResourceTypes(unit.resource_types);
-        }
-    }, [unit])
-
     const steps = [
         {
             title: 'Tipo de Recurso',
@@ -158,7 +151,7 @@ export default function () {
                 <Divider orientation="left">
                     Tipo de Recurso/Profissional
                 </Divider>
-                <ScheduleTypesList dataSource={resourceTypes} onClick={resourceTypeClick} />
+                <UnitResourceTypesListContainer onClick={resourceTypeClick} />
             </div>,
         },
         {
@@ -244,7 +237,7 @@ export default function () {
     ];
 
     return (
-        <div id="order">
+        <div id="order-page">
             <h1>Solicitar utilização de recurso</h1>
             <Row>
                 <Col md={8}>

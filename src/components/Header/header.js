@@ -25,8 +25,8 @@ export default function () {
     }, [location]);
 
     return (
-        <Header>
-            <div className="companies-list">
+        <Header id="header">
+            <div className="right-menu">
                 <UnitSelect />
                 <UserMenu />
             </div>

@@ -47,7 +47,7 @@ export default function () {
     };
 
     return (
-        <div id="login">
+        <div id="login-page">
             <Row>
                 <Col span={24}>
                     <div className="logo">
